@@ -46,7 +46,7 @@ serviceMonitor:
   path: /metrics
   releaseLabel: kube-prometheus-stack
 
-  image:
+image:
   repository: ghcr.io/Nagabhushanmagajiharish/platform-demo-app
   tag: latest
   pullPolicy: IfNotPresent
