@@ -1,0 +1,52 @@
+replicaCount: 2
+
+image:
+  repository: platform-demo-app
+  tag: v1
+  pullPolicy: IfNotPresent
+
+containerPort: 3000
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: true
+  className: nginx
+  host: platform-demo.local
+  path: /
+
+env:
+  PORT: "3000"
+  LOG_LEVEL: "info"
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "250m"
+    memory: "256Mi"
+
+probes:
+  readinessPath: /readyz
+  livenessPath: /healthz
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+serviceMonitor:
+  enabled: true
+  interval: 15s
+  path: /metrics
+  releaseLabel: kube-prometheus-stack
+
+  image:
+  repository: ghcr.io/Nagabhushanmagajiharish/platform-demo-app
+  tag: latest
+  pullPolicy: IfNotPresent
